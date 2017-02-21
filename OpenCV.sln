@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReadVideo", "ReadVideo\ReadVideo.vcxproj", "{B347A8F8-FA0B-47B2-9341-77B35921C539}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LEDPen", "LEDPen\LEDPen.vcxproj", "{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Debug|x64.ActiveCfg = Debug|x64
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Debug|x64.Build.0 = Debug|x64
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Debug|x86.ActiveCfg = Debug|Win32
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Debug|x86.Build.0 = Debug|Win32
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Release|x64.ActiveCfg = Release|x64
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Release|x64.Build.0 = Release|x64
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Release|x86.ActiveCfg = Release|Win32
+		{B347A8F8-FA0B-47B2-9341-77B35921C539}.Release|x86.Build.0 = Release|Win32
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Debug|x64.ActiveCfg = Debug|x64
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Debug|x64.Build.0 = Debug|x64
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Debug|x86.ActiveCfg = Debug|Win32
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Debug|x86.Build.0 = Debug|Win32
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Release|x64.ActiveCfg = Release|x64
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Release|x64.Build.0 = Release|x64
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Release|x86.ActiveCfg = Release|Win32
+		{94AB4A21-A861-4EA6-BC48-AA6B1675E4A6}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

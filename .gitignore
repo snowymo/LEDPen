@@ -24,6 +24,8 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+# Debug folder
+LEDPen\x64\Debug\*
