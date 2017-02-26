@@ -1,3 +1,4 @@
 ﻿  main.cpp
-  ReadVideo.vcxproj -> D:\Zhenyi\Projects\ReadVideo\x64\Debug\ReadVideo.exe
-  ReadVideo.vcxproj -> D:\Zhenyi\Projects\ReadVideo\x64\Debug\ReadVideo.pdb (Full PDB)
+d:\zhenyi\projects\ledpen\readvideo\main.cpp(33): warning C4390: ';': empty controlled statement found; is this the intent?
+  ReadVideo.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\ReadVideo.exe
+  ReadVideo.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\ReadVideo.pdb (Full PDB)

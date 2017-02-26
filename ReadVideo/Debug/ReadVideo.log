@@ -1,2 +1,3 @@
 ﻿  main.cpp
+d:\zhenyi\projects\ledpen\readvideo\main.cpp(33): warning C4390: ';': empty controlled statement found; is this the intent?
 opencv_world320.lib(opencv_world320.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'
