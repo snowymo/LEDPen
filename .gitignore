@@ -29,3 +29,5 @@
 
 # Debug folder
 LEDPen\x64\Debug\*
+OpenCV.VC.VC.opendb
+*.db

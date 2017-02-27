@@ -1,26 +1,146 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
+
+#include <iostream>
+#include "shader.h"
 #include <stdio.h>
+#include "Sphere.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-GLuint vao = 0;
+GLuint VBO, VAO;
+Sphere * ptrSphere = new Sphere;
+GLuint shaderProgram;
+int width, height;
 
-void createVAO() {
-	float points[] = {
-		0.0f,  0.5f,  0.0f,
-		0.5f, -0.5f,  0.0f,
-		-0.5f, -0.5f,  0.0f
+void drawTriangle() {
+	// matrix
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+
+	// Or, for an ortho camera :
+	//glm::mat4 Projection = glm::ortho(-10.0f,10.0f,-10.0f,10.0f,0.0f,100.0f); // In world coordinates
+
+	// Camera matrix
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+	);
+
+	// Model matrix : an identity matrix (model will be at the origin)
+	glm::mat4 Model = glm::mat4(1.0f);
+	// Our ModelViewProjection : multiplication of our 3 matrices
+	glm::mat4 mvp = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+	// Draw our first triangle
+	glUseProgram(shaderProgram);
+	// Get a handle for our "MVP" uniform
+	// Only during the initialisation
+	GLuint MatrixID = glGetUniformLocation(shaderProgram, "MVP");
+
+	// Send our transformation to the currently bound shader, in the "MVP" uniform
+	// This is done in the main loop since each model will have a different MVP matrix (At least for the M part)
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+	
+
+	glBindVertexArray(VAO);
+	// draw points 0-3 from the currently bound VAO with current in-use shader
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glBindVertexArray(0);
+}
+
+void display() {
+	// wipe the drawing surface clear
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glUseProgram(shader_programme);
+	drawTriangle();
+	// drwa sphere
+	//ptrSphere->draw();
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
+{
+	// When a user presses the escape key, we set the WindowShouldClose property to true, 
+	// closing the application
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+}
+
+void INI() {
+	// Build and compile our shader program
+	// Vertex shader
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+	// Check for compile time errors
+	GLint success;
+	GLchar infoLog[512];
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+	// Fragment shader
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
+	// Check for compile time errors
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+	// Link shaders
+	shaderProgram = glCreateProgram();
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+	// Check for linking errors
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
+	// another shader
+	// Load shaders, link program for drawing sphere
+	//GLuint programId = ptrSphere->loadShaders("sphereShader.vert", "sphereShader.frag");
+	//GLuint vertexPosition_modelspaceID = glGetAttribLocation(programId, "vertexPosition_modelspace");
+
+	// load OpenGL resources needed by the sphere
+	// pass the vertex position id to it
+	//ptrSphere->init(vertexPosition_modelspaceID);
+}
+
+void createTriangle()
+{
+
+	// Set up vertex data (and buffer(s)) and attribute pointers
+	GLfloat vertices[] = {
+		-0.5f, -0.5f, 0.0f, // Left  
+		0.5f, -0.5f, 0.0f, // Right 
+		0.0f,  0.5f, 0.0f  // Top   
 	};
+	
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
+	glBindVertexArray(VAO);
 
-	GLuint vbo = 0;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), points, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+
+	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 }
 
 int main() {
@@ -29,20 +149,17 @@ int main() {
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
 		return 1;
 	}
-
-	// uncomment these lines if on Apple OS X
-	/*glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
-
-	GLFWwindow* window = glfwCreateWindow(640, 480, "Hello Triangle", NULL, NULL);
+	
+	GLFWwindow* window = glfwCreateWindow(640, 480, "Circle Detection", NULL, NULL);
 	if (!window) {
 		fprintf(stderr, "ERROR: could not open window with GLFW3\n");
 		glfwTerminate();
 		return 1;
 	}
 	glfwMakeContextCurrent(window);
+
+	// Set the required callback functions
+	glfwSetKeyCallback(window, key_callback);
 
 	// start GLEW extension handler
 	glewExperimental = GL_TRUE;
@@ -58,174 +175,33 @@ int main() {
 	glEnable(GL_DEPTH_TEST); // enable depth-testing
 	glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
-						  /* OTHER STUFF GOES HERE NEXT */
+	
+	glfwGetFramebufferSize(window, &width, &height);
+	glViewport(0, 0, width, height);
 
-						  // close GL context and any other GLFW resources
+	compileNlinkShader();
 
-						  /* Loop until the user closes the window */
 
-	createVAO();
+	/* OTHER STUFF GOES HERE NEXT */
+	createTriangle();
 
+	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		// wipe the drawing surface clear
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		//glUseProgram(shader_programme);
-		glBindVertexArray(vao);
-		// draw points 0-3 from the currently bound VAO with current in-use shader
-		glDrawArrays(GL_TRIANGLES, 0, 3);
 		// update other events like input handling 
 		glfwPollEvents();
+		// Render
+		// Clear the colorbuffer
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		display();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
 	}
 
+	// close GL context and any other GLFW resources
 	glfwTerminate();
+	ptrSphere->cleanup();
 	return 0;
 }
-
-// #include <glad/glad.h>
-// #include <GL/glew.h>
-// #include <GLFW/glfw3.h>
-// #include "linmath.h"
-// #include <stdlib.h>
-// #include <stdio.h>
-// static const struct
-// {
-// 	float x, y;
-// 	float r, g, b;
-// } vertices[3] =
-// {
-// 	{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
-// 	{ 0.6f, -0.4f, 0.f, 1.f, 0.f },
-// 	{ 0.f,  0.6f, 0.f, 0.f, 1.f }
-// };
-// static const char* vertex_shader_text =
-// "uniform mat4 MVP;\n"
-// "attribute vec3 vCol;\n"
-// "attribute vec2 vPos;\n"
-// "varying vec3 color;\n"
-// "void main()\n"
-// "{\n"
-// "    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-// "    color = vCol;\n"
-// "}\n";
-// static const char* fragment_shader_text =
-// "varying vec3 color;\n"
-// "void main()\n"
-// "{\n"
-// "    gl_FragColor = vec4(color, 1.0);\n"
-// "}\n";
-// static void error_callback(int error, const char* description)
-// {
-// 	fprintf(stderr, "Error: %s\n", description);
-// }
-// static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-// {
-// 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-// 		glfwSetWindowShouldClose(window, GLFW_TRUE);
-// }
-// int main(void)
-// {
-// 	GLFWwindow* window;
-// 	GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-// 	GLint mvp_location, vpos_location, vcol_location;
-// 	glfwSetErrorCallback(error_callback);
-// 	if (!glfwInit())
-// 		exit(EXIT_FAILURE);
-// 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-// 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-// 	window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-// 	if (!window)
-// 	{
-// 		glfwTerminate();
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	glfwSetKeyCallback(window, key_callback);
-// 	glfwMakeContextCurrent(window);
-// 	//gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-// 	glfwSwapInterval(1);
-// 	// NOTE: OpenGL error checks have been omitted for brevity
-// 	glGenBuffers(1, &vertex_buffer);
-// 	glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-// 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-// 	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-// 	glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-// 	glCompileShader(vertex_shader);
-// 	fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-// 	glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-// 	glCompileShader(fragment_shader);
-// 	program = glCreateProgram();
-// 	glAttachShader(program, vertex_shader);
-// 	glAttachShader(program, fragment_shader);
-// 	glLinkProgram(program);
-// 	mvp_location = glGetUniformLocation(program, "MVP");
-// 	vpos_location = glGetAttribLocation(program, "vPos");
-// 	vcol_location = glGetAttribLocation(program, "vCol");
-// 	glEnableVertexAttribArray(vpos_location);
-// 	glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-// 		sizeof(float) * 5, (void*)0);
-// 	glEnableVertexAttribArray(vcol_location);
-// 	glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-// 		sizeof(float) * 5, (void*)(sizeof(float) * 2));
-// 	while (!glfwWindowShouldClose(window))
-// 	{
-// 		float ratio;
-// 		int width, height;
-// 		//mat4x4 m, p, mvp;
-// 		glfwGetFramebufferSize(window, &width, &height);
-// 		ratio = width / (float)height;
-// 		glViewport(0, 0, width, height);
-// 		glClear(GL_COLOR_BUFFER_BIT);
-// 		mat4x4_identity(m);
-// 		mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-// 		mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-// 		mat4x4_mul(mvp, p, m);
-// 		glUseProgram(program);
-// 		//glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*)mvp);
-// 		glDrawArrays(GL_TRIANGLES, 0, 3);
-// 		glfwSwapBuffers(window);
-// 		glfwPollEvents();
-// 	}
-// 	glfwDestroyWindow(window);
-// 	glfwTerminate();
-// 	exit(EXIT_SUCCESS);
-// }
-
-// #include <GLFW/glfw3.h>
-// 
-// int main(void)
-// {
-// 	GLFWwindow* window;
-// 
-// 	/* Initialize the library */
-// 	if (!glfwInit())
-// 		return -1;
-// 
-// 	/* Create a windowed mode window and its OpenGL context */
-// 	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-// 	if (!window)
-// 	{
-// 		glfwTerminate();
-// 		return -1;
-// 	}
-// 
-// 	/* Make the window's context current */
-// 	glfwMakeContextCurrent(window);
-// 
-// 	/* Loop until the user closes the window */
-// 	while (!glfwWindowShouldClose(window))
-// 	{
-// 		/* Render here */
-// 		glClear(GL_COLOR_BUFFER_BIT);
-// 
-// 		/* Swap front and back buffers */
-// 		glfwSwapBuffers(window);
-// 
-// 		/* Poll for and process events */
-// 		glfwPollEvents();
-// 	}
-// 
-// 	glfwTerminate();
-// 	return 0;
-// }
