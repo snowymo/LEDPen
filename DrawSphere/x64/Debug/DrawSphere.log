@@ -1,0 +1,6 @@
+﻿  DrawSphere.cpp
+d:\zhenyi\projects\ledpen\drawsphere\drawsphere.cpp(131): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\zhenyi\projects\ledpen\drawsphere\drawsphere.cpp(134): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\zhenyi\projects\ledpen\drawsphere\drawsphere.cpp(137): warning C4305: 'initializing': truncation from 'double' to 'float'
+  DrawSphere.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\DrawSphere.exe
+  DrawSphere.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\DrawSphere.pdb (Full PDB)
