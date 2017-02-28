@@ -19,6 +19,7 @@ OGLTriangle * pTri = new OGLTriangle;
 OGLSquare * pSq = new OGLSquare;
 float x = 0, y = 0;
 cv::Mat src;
+ImageProcessor *pImgPro = new ImageProcessor;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -39,8 +40,32 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	else if (key == GLFW_KEY_D) {
 		x += 2;
 	}
+	else if (key == GLFW_KEY_U) {
+		pImgPro->dp += 0.05;
+		std::cout << "dp:" << pImgPro->dp << "\n";
+	}
+	else if (key == GLFW_KEY_J) {
+		pImgPro->dp -= 0.05;
+		std::cout << "dp:" << pImgPro->dp << "\n";
+	}
+	else if (key == GLFW_KEY_I) {
+		pImgPro->p1 += 5;
+		std::cout << "p1:" << pImgPro->p1 << "\n";
+	}
+	else if (key == GLFW_KEY_K) {
+		pImgPro->p1 -= 5;
+		std::cout << "p1:" << pImgPro->p1 << "\n";
+	}
+	else if (key == GLFW_KEY_O) {
+		pImgPro->p2 += 3;
+		std::cout << "p2:" << pImgPro->p2 << "\n";
+	}
+	else if (key == GLFW_KEY_L) {
+		pImgPro->p2 -= 3;
+		std::cout << "p2:" << pImgPro->p2 << "\n";
+	}
 	
-	std::cout << x << "\t" << y << "\n";
+	//std::cout << x << "\t" << y << "\n";
 }
 
 void display() {
@@ -62,8 +87,8 @@ int main() {
 		return -1;
 	int curexposure = cap.get(CV_CAP_PROP_EXPOSURE);
 	int curAutoExpo = cap.get(CV_CAP_PROP_AUTO_EXPOSURE);
-//	bool success = cap.set(CV_CAP_PROP_EXPOSURE, -9);
-	bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
+	bool success = cap.set(CV_CAP_PROP_EXPOSURE, -9);
+//	bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
 	std::cout << success;
 	// start GL context and O/S window using the GLFW helper library
 	if (!glfwInit()) {
@@ -109,7 +134,7 @@ int main() {
 	//pSphere->create();
 	pSq->create();
 
-	ImageProcessor *pImgPro = new ImageProcessor;
+	
 	
 	std::vector<cv::Vec3f> circles;
 
@@ -151,7 +176,7 @@ int main() {
 // 			worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
 // 			std::cout << "\tworld:" << worldpos << "\n";
 			// Render
-			pSq->draw(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 3), 0.3/*circles[i][2]*/);
+			pSq->draw(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 2.0), 0.1/*circles[i][2]*/);
 		}
 		//pSq->draw(glm::vec3(1,0,y), 0.5);
 		

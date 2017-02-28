@@ -14,7 +14,11 @@ ImageProcessor::ImageProcessor()
 	circleNum = 1;
 	lifeTime = 0;
 	maxLifeTime = 10;
-	maxDistance = 150;
+	maxDistance = 350;
+
+	dp = 1.3;
+	p1 = 200;
+	p2 = 20;
 }
 
 ImageProcessor::ImageProcessor(cv::Mat)
@@ -49,7 +53,7 @@ void ImageProcessor::CheckCircle()
 {
 	/// Apply the Hough Transform to find the circles
 	start = std::chrono::system_clock::now();
-	HoughCircles(mBlur, mAllCircles, CV_HOUGH_GRADIENT, 1.2/*1.3*/, mBlur.rows / 16, 200, 55, 0, 0);
+	HoughCircles(mBlur, mAllCircles, CV_HOUGH_GRADIENT, dp, mBlur.rows / 16, p1, p2, 0, 0);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
 	std::cout << "amount of circle " << mAllCircles.size() << " after " << elapsed.count() << "s\n";

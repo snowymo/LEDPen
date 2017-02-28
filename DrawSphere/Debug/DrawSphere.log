@@ -1,20 +1,21 @@
-﻿  OGLTriangle.cpp
-  OGLSquare.cpp
-  OGLSphere.cpp
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(79): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(80): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(81): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(85): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(86): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\oglsphere.cpp(87): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-  OGLObj.cpp
-  ImageProcessor.cpp
-d:\zhenyi\projects\ledpen\drawsphere\imageprocessor.cpp(134): warning C4018: '<=': signed/unsigned mismatch
-d:\zhenyi\projects\ledpen\drawsphere\imageprocessor.cpp(148): warning C4018: '<': signed/unsigned mismatch
-d:\zhenyi\projects\ledpen\drawsphere\imageprocessor.cpp(150): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  DrawSphere.cpp
-d:\zhenyi\projects\ledpen\drawsphere\drawsphere.cpp(63): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-d:\zhenyi\projects\ledpen\drawsphere\drawsphere.cpp(135): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-opencv_world320d.lib(opencv_world320d.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'
-C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppCommon.targets(638,5): error MSB6006: "link.exe" exited with code 1112.
+﻿Build started 2/28/2017 5:01:30 PM.
+     1>Project "E:\Zhenyi\Github\LEDPen\LEDPen\DrawSphere\DrawSphere.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"D:\Library\glew-2.0.0\include" /I"D:\Library\glfw-3.2.1.bin.WIN64\include" /I"D:\Library\glm-0.9.8.4\glm" /ID:\Library\opencv\build\x64\vc14\..\..\include /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt DrawSphere.cpp ImageProcessor.cpp OGLObj.cpp OGLSphere.cpp OGLSquare.cpp OGLTriangle.cpp
+         OGLTriangle.cpp
+     1>d:\library\glm-0.9.8.4\glm\glm\detail\setup.hpp(30): fatal error C1083: Cannot open include file: '../simd/platform.h': No such file or directory
+         OGLSquare.cpp
+     1>d:\library\glm-0.9.8.4\glm\glm\detail\setup.hpp(30): fatal error C1083: Cannot open include file: '../simd/platform.h': No such file or directory
+         OGLSphere.cpp
+     1>d:\library\glm-0.9.8.4\glm\glm\detail\setup.hpp(30): fatal error C1083: Cannot open include file: '../simd/platform.h': No such file or directory
+         OGLObj.cpp
+         ImageProcessor.cpp
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.h(4): fatal error C1083: Cannot open include file: 'opencv2/calib3d.hpp': No such file or directory
+         DrawSphere.cpp
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\drawsphere.cpp(4): fatal error C1083: Cannot open include file: 'opencv2/opencv.hpp': No such file or directory
+         Generating Code...
+     1>Done Building Project "E:\Zhenyi\Github\LEDPen\LEDPen\DrawSphere\DrawSphere.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.10

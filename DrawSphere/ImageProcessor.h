@@ -46,6 +46,8 @@ private:
 	std::vector<cv::Vec3f> mCircles;	//[0]:x, [1]:y, [2]:r
 	std::vector<cv::Vec3f> mAllCircles;	//[0]:x, [1]:y, [2]:r
 	cv::Mat cameraMatrix, distCoeffs, extrinsicMatrix, rtvec;
+public:
+	float dp, p1, p2;
 
 public:
 	cv::Mat getRTVec() { return rtvec; }

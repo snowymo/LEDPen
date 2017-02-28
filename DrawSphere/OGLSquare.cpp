@@ -32,7 +32,7 @@ void OGLSquare::draw(glm::vec3 pos, float r)
 
 	// Model matrix : an identity matrix (model will be at the origin)
 	// todo: set position here as a translation, r as a scale
-	glm::mat4 Model = glm::scale(glm::vec3(r, r, r)) * glm::translate(pos) * glm::mat4(1.0f);
+	glm::mat4 Model = glm::translate(pos) * glm::scale(glm::vec3(r, r, r)) * glm::mat4(1.0f);
 	
 
 	// Our ModelViewProjection : multiplication of our 3 matrices
@@ -48,8 +48,11 @@ void OGLSquare::draw(glm::vec3 pos, float r)
 	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
 
 	glBindVertexArray(VAO);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	// draw points 0-4 from the currently bound VAO with current in-use shader
 	glDrawArrays(GL_QUADS, 0, 4);
+	//glDrawArrays(GL_TRIANGLES, 0, 3);
+	//glDrawArrays(GL_TRIANGLES, 1, 3);
 	glBindVertexArray(0);
 }
 
@@ -57,10 +60,12 @@ void OGLSquare::create()
 {
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] = {
-		-0.5f, -0.5f, 0.0f, // Left  
 		0.5f, -0.5f, 0.0f, // Right 
 		0.5f, 0.5f, 0.0f, // RU
 		-0.5f, 0.5f, 0.0f, // LU
+		-0.5f, -0.5f, 0.0f, // Left  
+		0.5f, -0.5f, 0.0f, // Right 
+		0.5f, 0.5f, 0.0f, // RU
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -72,7 +77,7 @@ void OGLSquare::create()
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	//(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* pointer);
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
