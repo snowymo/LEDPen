@@ -25,9 +25,10 @@ private:
 	void blur();
 	void undistort();
 	void importConfig();
-
 	void track();
+	void readImages(std::string path, std::vector<cv::Mat>& images, std::vector<float>& times);
 
+	void underexposure();
 private:
 	cv::Mat mSource, mGray, mThres, mBlur, mUndistort;
 	int threshold_type = 3;;

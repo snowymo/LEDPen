@@ -1,0 +1,2 @@
+test.png 15.0
+test.png 2.5

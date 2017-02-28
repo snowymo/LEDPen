@@ -1,13 +1,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
+#include "opencv2/opencv.hpp"
+#include "opencv2/videoio.hpp"
+#include "opencv2/core/matx.hpp"
 #include "OGLTriangle.h"
 #include "OGLSphere.h"
 #include <iostream>
 #include "OGLSquare.h"
-#include "opencv2/opencv.hpp"
-#include "opencv2/videoio.hpp"
-#include "opencv2/core/matx.hpp"
+
 #include "ImageProcessor.h"
 
 
@@ -16,7 +17,9 @@ int width, height;
 OGLTriangle * pTri = new OGLTriangle;
 //OGLSphere * pSphere = new OGLSphere;
 OGLSquare * pSq = new OGLSquare;
-float x = 11, y = -15;
+float x = 0, y = 0;
+cv::Mat src;
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	// When a user presses the escape key, we set the WindowShouldClose property to true, 
@@ -24,10 +27,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	else if (key == GLFW_KEY_W) {
-		y += 2;
+		y += 1;
 	}
 	else if (key == GLFW_KEY_S) {
-		y -= 2;
+		y -= 1;
+		//cv::imwrite("test.png", src);
 	}
 	else if (key == GLFW_KEY_A) {
 		x -= 2;
@@ -35,7 +39,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	else if (key == GLFW_KEY_D) {
 		x += 2;
 	}
-	//astd::cout << x << "\t" << y << "\n";
+	
+	std::cout << x << "\t" << y << "\n";
 }
 
 void display() {
@@ -55,7 +60,11 @@ int main() {
 	cv::VideoCapture cap(0);
 	if (!cap.isOpened())
 		return -1;
-
+	int curexposure = cap.get(CV_CAP_PROP_EXPOSURE);
+	int curAutoExpo = cap.get(CV_CAP_PROP_AUTO_EXPOSURE);
+//	bool success = cap.set(CV_CAP_PROP_EXPOSURE, -9);
+	bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
+	std::cout << success;
 	// start GL context and O/S window using the GLFW helper library
 	if (!glfwInit()) {
 		fprintf(stderr, "ERROR: could not start GLFW3\n");
@@ -101,7 +110,7 @@ int main() {
 	pSq->create();
 
 	ImageProcessor *pImgPro = new ImageProcessor;
-	cv::Mat src;
+	
 	std::vector<cv::Vec3f> circles;
 
 	/* Loop until the user closes the window */
@@ -142,9 +151,9 @@ int main() {
 // 			worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
 // 			std::cout << "\tworld:" << worldpos << "\n";
 			// Render
-			pSq->draw(glm::vec3(circles[i][0] / 640.0f, circles[i][1] / 480.0f, 0), 1/*circles[i][2]*/);
+			pSq->draw(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 3), 0.3/*circles[i][2]*/);
 		}
-		pSq->draw(glm::vec3(x,3,y), 5);
+		//pSq->draw(glm::vec3(1,0,y), 0.5);
 		
 		//display();
 		// put the stuff we've been drawing onto the display

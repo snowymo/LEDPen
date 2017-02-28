@@ -5,6 +5,9 @@
 #include <time.h>
 #include <chrono>
 #include "opencv2\core\persistence.hpp"
+#include "opencv2\photo.hpp"
+#include <fstream>
+#include "opencv2\imgcodecs.hpp"
 
 ImageProcessor::ImageProcessor()
 {
@@ -36,6 +39,7 @@ void ImageProcessor::PreProcess()
 	turnGray();
 	//threshold();
 	blur();
+	//underexposure();
 }
 
 std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -166,4 +170,32 @@ void ImageProcessor::track()
 		mCircles.pop_back();
 	}
 	mCircles = mCurCircle;
+}
+
+void ImageProcessor::readImages(std::string path, std::vector<cv::Mat>& images, std::vector<float>& times)
+{
+	path = path + std::string("/");
+	std::ifstream list_file((path + "list.txt").c_str());
+	std::string name;
+	float val;
+	while (list_file >> name >> val) {
+		cv::Mat img = cv::imread(path + name);
+		images.push_back(img);
+		times.push_back(1 / val);
+	}
+	list_file.close();
+}
+
+void ImageProcessor::underexposure()
+{
+	std::vector<cv::Mat> images;
+	std::vector<float> times;
+	readImages("exposureImg", images, times);
+
+	cv::Mat response;
+	cv::Ptr<cv::CalibrateCRF> debevecCalib = cv::createCalibrateDebevec();
+
+	cv::Mat hdr;
+	cv::Ptr<cv::MergeDebevec> merge_debevec = cv::createMergeDebevec();
+	merge_debevec->process(images, hdr, times, response);
 }
