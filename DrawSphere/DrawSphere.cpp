@@ -35,7 +35,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	else if (key == GLFW_KEY_D) {
 		x += 2;
 	}
-	std::cout << x << "\t" << y << "\n";
+	//astd::cout << x << "\t" << y << "\n";
 }
 
 void display() {
@@ -123,25 +123,26 @@ int main() {
 		pImgPro->setSource(src);
 		pImgPro->PreProcess();
 		pImgPro->CheckCircle();
+		
 		circles = pImgPro->getCircles();
 		for (int i = 0; i < circles.size(); i++) {
 			// calculate world position
 			// Rvec-1 * ( (intrisic)-1 * s * [u,v,1] - tvec)
-			cv::Mat rtvec = pImgPro->getRTVec();// rtvec
-			cv::Matx31f rvec(rtvec.at<double>(0, 0), rtvec.at<double>(0, 1), rtvec.at<double>(0, 2));
-			cv::Matx33f rmat;
-			cv::Rodrigues(rvec, rmat);
-			cv::Matx31f tvec(rtvec.at<double>(0, 3), rtvec.at<double>(0, 4), rtvec.at<double>(0, 5));
-			cv::Matx33f intrisic(pImgPro->getIntrisic());
-			cv::Matx31f screen(circles[i][0]-320,240-circles[i][1],1);
-			float sc = 0.1;
-			cv::Matx31f worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
-			std::cout << "\tworld:" << worldpos << "\n";
+			//cv::Mat rtvec = pImgPro->getRTVec();// rtvec
+			//cv::Matx31f rvec(rtvec.at<double>(0, 0), rtvec.at<double>(0, 1), rtvec.at<double>(0, 2));
+			//cv::Matx33f rmat;
+			//cv::Rodrigues(rvec, rmat);
+			//cv::Matx31f tvec(rtvec.at<double>(0, 3), rtvec.at<double>(0, 4), rtvec.at<double>(0, 5));
+			//cv::Matx33f intrisic(pImgPro->getIntrisic());
+			//cv::Matx31f screen(circles[i][0]-320,240-circles[i][1],1);
+			//float sc = 0.1;
+			//cv::Matx31f worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
+			//std::cout << "\tworld:" << worldpos << "\n";
 // 			sc = 0.01;
 // 			worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
 // 			std::cout << "\tworld:" << worldpos << "\n";
 			// Render
-			pSq->draw(glm::vec3(worldpos(0), worldpos(1), worldpos(2)), 10/*circles[i][2]*/);
+			pSq->draw(glm::vec3(circles[i][0] / 640.0f, circles[i][1] / 480.0f, 0), 1/*circles[i][2]*/);
 		}
 		pSq->draw(glm::vec3(x,3,y), 5);
 		

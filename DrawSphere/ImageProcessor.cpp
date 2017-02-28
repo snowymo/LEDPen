@@ -8,7 +8,10 @@
 
 ImageProcessor::ImageProcessor()
 {
-
+	circleNum = 1;
+	lifeTime = 0;
+	maxLifeTime = 10;
+	maxDistance = 150;
 }
 
 ImageProcessor::ImageProcessor(cv::Mat)
@@ -41,14 +44,26 @@ std::chrono::duration<double> elapsed;
 void ImageProcessor::CheckCircle()
 {
 	/// Apply the Hough Transform to find the circles
-	
 	start = std::chrono::system_clock::now();
-	HoughCircles(mBlur, mCircles, CV_HOUGH_GRADIENT, 1/*1.3*/, mBlur.rows / 16, 200, 55, 0, 0);
+	HoughCircles(mBlur, mAllCircles, CV_HOUGH_GRADIENT, 1.2/*1.3*/, mBlur.rows / 16, 200, 55, 0, 0);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
-	std::cout << "amount of circle " << mCircles.size() << " after " << elapsed.count() << "s\n";
+	std::cout << "amount of circle " << mAllCircles.size() << " after " << elapsed.count() << "s\n";
 
 	/// Draw the circles detected
+	for (size_t i = 0; i < mAllCircles.size(); i++)
+	{
+		cv::Point center(cvRound(mAllCircles[i][0]), cvRound(mAllCircles[i][1]));
+		int radius = cvRound(mAllCircles[i][2]);
+		// circle center
+		circle(mSource, center, 3, cv::Scalar(0, 120, 0), -1, 8, 0);
+		// circle outline
+		circle(mSource, center, radius, cv::Scalar(120, 255, 120), 3, 8, 0);
+		std::cout << "\tall circle:" << mAllCircles[i] << "\n";
+	}
+
+	track();
+	
 	for (size_t i = 0; i < mCircles.size(); i++)
 	{
 		cv::Point center(cvRound(mCircles[i][0]), cvRound(mCircles[i][1]));
@@ -106,4 +121,49 @@ void ImageProcessor::importConfig()
 		fs["distortion_coefficients"] >> distCoeffs;
 		fs["extrinsic_parameters"] >> rtvec;
 	}
+}
+
+void ImageProcessor::track()
+{
+	// if no previous circle
+	if (mCircles.size() == 0) {
+		if (mAllCircles.size() <= circleNum) {
+			// keep all of them
+			mCircles = mAllCircles;
+		}
+		return;
+	}
+
+	// only certain number of circles could be detected
+	++lifeTime;
+	std::vector<cv::Vec3f> mCurCircle;
+	while( !mCircles.empty()){
+	//for (int i = 0; i < mCircles.size(); i++) {
+		float minDis = maxDistance;
+		int minIdx = -1;
+		for( int j = 0; j < mAllCircles.size(); j++) {
+			// if there is previous circle, check the distance
+			float dis = cv::norm(mAllCircles[j] - mCircles.back(), cv::NORM_L2);
+			std::cout << "test dis " << dis << "\n";
+			// the position of the circle should be close enough to previous one
+			if (dis < maxDistance) {
+				if (dis < minDis) {
+					minIdx = j;
+				}
+			}
+		}
+		// allCircle[j] should be kept
+		if (minIdx != -1) {
+			mCurCircle.push_back(mAllCircles[minIdx]);
+			lifeTime = 0;
+		}
+		else if (lifeTime < maxLifeTime) {
+			mCurCircle.push_back(mCircles.back());
+		}
+		else {
+			lifeTime = 0;
+		}
+		mCircles.pop_back();
+	}
+	mCircles = mCurCircle;
 }

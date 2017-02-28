@@ -26,6 +26,8 @@ private:
 	void undistort();
 	void importConfig();
 
+	void track();
+
 private:
 	cv::Mat mSource, mGray, mThres, mBlur, mUndistort;
 	int threshold_type = 3;;
@@ -34,8 +36,14 @@ private:
 	int const max_BINARY_value = 255;
 	int threshold_value = 107;
 
+	int circleNum;
+	int lifeTime;
+	int maxLifeTime;
+	float maxDistance;
+
 	// circle information
 	std::vector<cv::Vec3f> mCircles;	//[0]:x, [1]:y, [2]:r
+	std::vector<cv::Vec3f> mAllCircles;	//[0]:x, [1]:y, [2]:r
 	cv::Mat cameraMatrix, distCoeffs, extrinsicMatrix, rtvec;
 
 public:
