@@ -11,13 +11,13 @@
 
 ImageProcessor::ImageProcessor()
 {
-	circleNum = 1;
+	circleNum = 2;
 	lifeTime = 0;
 	maxLifeTime = 10;
 	maxDistance = 350;
 
-	dp = 1.3;
-	p1 = 200;
+	dp = 1.1;
+	p1 = 205;
 	p2 = 20;
 }
 
@@ -56,7 +56,7 @@ void ImageProcessor::CheckCircle()
 	HoughCircles(mBlur, mAllCircles, CV_HOUGH_GRADIENT, dp, mBlur.rows / 16, p1, p2, 0, 0);
 	end = std::chrono::system_clock::now();
 	elapsed = end - start;
-	std::cout << "amount of circle " << mAllCircles.size() << " after " << elapsed.count() << "s\n";
+	//std::cout << "amount of circle " << mAllCircles.size() << " after " << elapsed.count() << "s\n";
 
 	/// Draw the circles detected
 	for (size_t i = 0; i < mAllCircles.size(); i++)
@@ -67,7 +67,7 @@ void ImageProcessor::CheckCircle()
 		circle(mSource, center, 3, cv::Scalar(0, 120, 0), -1, 8, 0);
 		// circle outline
 		circle(mSource, center, radius, cv::Scalar(120, 255, 120), 3, 8, 0);
-		std::cout << "\tall circle:" << mAllCircles[i] << "\n";
+		//std::cout << "\tall circle:" << mAllCircles[i] << "\n";
 	}
 
 	track();
@@ -80,7 +80,7 @@ void ImageProcessor::CheckCircle()
 		circle(mSource, center, 3, cv::Scalar(0, 255, 0), -1, 8, 0);
 		// circle outline
 		circle(mSource, center, radius, cv::Scalar(255, 0, 255), 3, 8, 0);
-		std::cout << "\tcircle:" << mCircles[i] << "\n";
+		//std::cout << "\tcircle:" << mCircles[i] << "\n";
 	}
 	/// Show your results
 	cv::imshow("result", mSource);
@@ -151,11 +151,12 @@ void ImageProcessor::track()
 		int minIdx = -1;
 		for( int j = 0; j < mAllCircles.size(); j++) {
 			// if there is previous circle, check the distance
-			float dis = cv::norm(mAllCircles[j] - mCircles.back(), cv::NORM_L2);
-			std::cout << "test dis " << dis << "\n";
+			float dis = cv::norm(cv::Vec3f(mAllCircles[j][0],mAllCircles[j][1]) - cv::Vec3f(mCircles.back()[0],mCircles.back()[1]), cv::NORM_L2);
+			//std::cout << "test dis " << dis << "\n";
 			// the position of the circle should be close enough to previous one
 			if (dis < maxDistance) {
 				if (dis < minDis) {
+					minDis = dis;
 					minIdx = j;
 				}
 			}
@@ -163,6 +164,7 @@ void ImageProcessor::track()
 		// allCircle[j] should be kept
 		if (minIdx != -1) {
 			mCurCircle.push_back(mAllCircles[minIdx]);
+			mAllCircles.erase(mAllCircles.begin() + minIdx);
 			lifeTime = 0;
 		}
 		else if (lifeTime < maxLifeTime) {
@@ -173,7 +175,24 @@ void ImageProcessor::track()
 		}
 		mCircles.pop_back();
 	}
+
+	if (mCurCircle.size() > 1) {
+		float dis = cv::norm(cv::Vec3f(mCurCircle[0][0], mCurCircle[0][1]) - cv::Vec3f(mCurCircle[1][0], mCurCircle[1][1]), cv::NORM_L2);
+		std::cout << "two close circle dis:\t" << dis << "\n";
+		if (dis <= 40) {
+			mCurCircle.pop_back();
+		}
+	}
+
 	mCircles = mCurCircle;
+	while (mCircles.size() < 2 && mAllCircles.size() > 0) {
+		float dis = cv::norm(cv::Vec3f(mCurCircle[0][0],mCurCircle[0][1]) - cv::Vec3f(mAllCircles.back()[0],mAllCircles.back()[1]), cv::NORM_L2);
+		std::cout << "two close circle dis:\t" << dis << "\n";
+		if (dis > 40) {
+			mCircles.push_back(mAllCircles.back());
+		}
+		mAllCircles.pop_back();
+	}
 }
 
 void ImageProcessor::readImages(std::string path, std::vector<cv::Mat>& images, std::vector<float>& times)

@@ -77,7 +77,7 @@ void display() {
 	// drwa sphere
 	//pSphere->draw();
 	//ptrSphere->draw();
-	pSq->draw(glm::vec3(1,0,0));
+	//pSq->draw(glm::vec3(1,0,0));
 }
 
 
@@ -85,10 +85,13 @@ int main() {
 	cv::VideoCapture cap(0);
 	if (!cap.isOpened())
 		return -1;
+	bool success = cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
+	success = cap.set(cv::CAP_PROP_FRAME_HEIGHT, 360);
+	success = cap.set(cv::CAP_PROP_FPS, 60);
 	int curexposure = cap.get(CV_CAP_PROP_EXPOSURE);
 	int curAutoExpo = cap.get(CV_CAP_PROP_AUTO_EXPOSURE);
-	bool success = cap.set(CV_CAP_PROP_EXPOSURE, -9);
-//	bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
+	success = cap.set(CV_CAP_PROP_EXPOSURE, -7);
+	//bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
 	std::cout << success;
 	// start GL context and O/S window using the GLFW helper library
 	if (!glfwInit()) {
@@ -176,10 +179,10 @@ int main() {
 // 			worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
 // 			std::cout << "\tworld:" << worldpos << "\n";
 			// Render
-			pSq->draw(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 2.0), 0.1/*circles[i][2]*/);
+			pSq->add(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 2.0));
 		}
 		//pSq->draw(glm::vec3(1,0,y), 0.5);
-		
+		pSq->draw();
 		//display();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);

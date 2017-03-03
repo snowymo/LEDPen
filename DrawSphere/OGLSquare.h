@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 
+#include <vector>
+
 #include "OGLObj.h"
 class OGLSquare :
 	public OGLObj
@@ -11,7 +13,9 @@ public:
 	OGLSquare();
 	~OGLSquare();
 
-	void draw(glm::vec3 pos = glm::vec3(0,0,0), float r = 1);
+	//void draw(glm::vec3 pos = glm::vec3(0,0,0), float r = 1);
+	void add(glm::vec3 pos = glm::vec3(0, 0, 0));
+	void draw();
 	void create();
 	void LinkShaders();
 
@@ -30,6 +34,7 @@ private:
 		"{\n"
 		"color = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
 		"}\n\0";
+	std::vector<GLfloat> vertices;
 };
 
 #endif

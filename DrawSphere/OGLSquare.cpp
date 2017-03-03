@@ -13,8 +13,42 @@ OGLSquare::~OGLSquare()
 {
 }
 
-void OGLSquare::draw(glm::vec3 pos, float r)
+void OGLSquare::add(glm::vec3 pos /*= glm::vec3(0, 0, 0)*/)
 {
+	// Set up vertex data (and buffer(s)) and attribute pointers
+	
+
+	vertices.push_back(pos.x + 0.5f);
+	vertices.push_back(pos.y - 0.5f);
+	vertices.push_back(0);
+
+	vertices.push_back(pos.x + 0.5f);
+	vertices.push_back(pos.y + 0.5f);
+	vertices.push_back(0);
+
+	vertices.push_back(pos.x - 0.5f);
+	vertices.push_back(pos.y + 0.5f);
+	vertices.push_back(0);
+
+	vertices.push_back(pos.x - 0.5f);
+	vertices.push_back(pos.y - 0.5f);
+	vertices.push_back(0);
+
+}
+
+void OGLSquare::draw()
+{
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+	vertices.clear();
+
+
 	// matrix
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), (float)640 / (float)480, 0.1f, 500.0f);
@@ -28,12 +62,12 @@ void OGLSquare::draw(glm::vec3 pos, float r)
 		glm::vec3(0, 0, 3), // Camera is at (0,0,3), in World Space
 		glm::vec3(0, 0, 0), // and looks at the origin
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-	);
+		);
 
 	// Model matrix : an identity matrix (model will be at the origin)
 	// todo: set position here as a translation, r as a scale
-	glm::mat4 Model = glm::translate(pos) * glm::scale(glm::vec3(r, r, r)) * glm::mat4(1.0f);
-	
+	glm::mat4 Model = /*glm::translate(pos) * glm::scale(glm::vec3(r, r, r)) * */glm::mat4(1.0f);
+
 
 	// Our ModelViewProjection : multiplication of our 3 matrices
 	glm::mat4 mvp = Projection * View * Model; // Remember, matrix multiplication is the other way around
@@ -53,28 +87,28 @@ void OGLSquare::draw(glm::vec3 pos, float r)
 	glDrawArrays(GL_QUADS, 0, 4);
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
 	//glDrawArrays(GL_TRIANGLES, 1, 3);
-	glBindVertexArray(0);
+	//glBindVertexArray(0);
 }
 
 void OGLSquare::create()
 {
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	GLfloat vertices[] = {
-		0.5f, -0.5f, 0.0f, // Right 
-		0.5f, 0.5f, 0.0f, // RU
-		-0.5f, 0.5f, 0.0f, // LU
-		-0.5f, -0.5f, 0.0f, // Left  
-		0.5f, -0.5f, 0.0f, // Right 
-		0.5f, 0.5f, 0.0f, // RU
-	};
+// 	GLfloat vertices[] = {
+// 		0.5f, -0.5f, 0.0f, // Right 
+// 		0.5f, 0.5f, 0.0f, // RU
+// 		-0.5f, 0.5f, 0.0f, // LU
+// 		-0.5f, -0.5f, 0.0f, // Left  
+// 		0.5f, -0.5f, 0.0f, // Right 
+// 		0.5f, 0.5f, 0.0f, // RU
+// 	};
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	// Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-	glBindVertexArray(VAO);
+	//glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 	//(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void* pointer);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
