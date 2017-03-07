@@ -183,6 +183,7 @@ int main() {
 		}
 		//pSq->draw(glm::vec3(1,0,y), 0.5);
 		pSq->draw();
+		std::cout << "pos:" << pImgPro->getPos() << "\n";
 		//display();
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);

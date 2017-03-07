@@ -1,12 +1,13 @@
-﻿Build started 3/3/2017 2:37:21 AM.
+﻿Build started 3/6/2017 10:59:22 PM.
      1>Project "E:\Zhenyi\Github\LEDPen\LEDPen\DrawSphere\DrawSphere.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"D:\Library\glew-2.0.0\include" /I"D:\Library\glfw-3.2.1.bin.WIN64\include" /I"D:\Library\glm-0.9.8.4\glm" /ID:\Library\opencv\build\x64\vc14\..\..\include /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt ImageProcessor.cpp
          ImageProcessor.cpp
      1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(19): warning C4305: '=': truncation from 'double' to 'float'
-     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(154): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(180): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(189): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(181): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(207): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+     1>e:\zhenyi\github\ledpen\ledpen\drawsphere\imageprocessor.cpp(216): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\DrawSphere.exe" /INCREMENTAL /NOLOGO /LIBPATH:"D:\Library\glew-2.0.0\lib\Release\x64" /LIBPATH:"D:\Library\glfw-3.2.1.bin.WIN64\lib-vc2015" /LIBPATH:D:\Library\opencv\build\x64\vc14/lib glew32.lib glfw3.lib opengl32.lib opencv_world320d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\DrawSphere.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\DrawSphere.lib" /MACHINE:X64 x64\Debug\DrawSphere.obj
          x64\Debug\ImageProcessor.obj

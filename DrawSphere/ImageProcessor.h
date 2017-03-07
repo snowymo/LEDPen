@@ -10,7 +10,8 @@ public:
 	~ImageProcessor();
 
 	std::vector<cv::Vec3f> getCircles() const { return mCircles; }
-	
+	void calculatePos();
+	cv::Vec3f getPos();
 public:
 	void setSource(cv::Mat);
 
@@ -41,6 +42,8 @@ private:
 	int lifeTime;
 	int maxLifeTime;
 	float maxDistance;
+
+	cv::Vec3f mPos;
 
 	// circle information
 	std::vector<cv::Vec3f> mCircles;	//[0]:x, [1]:y, [2]:r

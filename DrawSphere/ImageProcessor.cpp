@@ -31,6 +31,31 @@ ImageProcessor::~ImageProcessor()
 
 }
 
+void ImageProcessor::calculatePos()
+{
+	if (mCircles.size() == 2) {
+		if (mCircles[0][1] > mCircles[1][1]) {
+			mPos[0] = mCircles[0][0];
+			mPos[1] = mCircles[0][1];
+		}
+		else {
+			mPos[0] = mCircles[1][0];
+			mPos[1] = mCircles[1][1];
+		}
+		// calculate h
+		mPos[2] = cv::norm(mCircles[0] - mCircles[1], cv::NORM_L2) / 2 / sqrtf(2);
+	}
+	else {
+		mPos = cv::Vec3f();
+	}
+}
+
+cv::Vec3f ImageProcessor::getPos()
+{
+	// return (x,y,h) x,y is the higher one and h is the height after calculation
+	return mPos;
+}
+
 void ImageProcessor::setSource(cv::Mat ref)
 {
 	// shallow copy
@@ -84,6 +109,8 @@ void ImageProcessor::CheckCircle()
 	}
 	/// Show your results
 	cv::imshow("result", mSource);
+
+	calculatePos();
 
 }
 
