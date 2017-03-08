@@ -1,2 +1,14 @@
-﻿  OGLTutorial.cpp
-x64\Debug\OGLTutorial.obj : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'
+﻿Build started 3/7/2017 9:17:59 PM.
+     1>Project "E:\Zhenyi\Github\LEDPen\LEDPen\OGLTutorial\OGLTutorial.vcxproj" on node 4 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"D:\Library\glew-2.0.0\include" /I"D:\Library\glfw-3.2.1.bin.WIN64\include" /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt OGLTutorial.cpp Sphere.cpp
+         Sphere.cpp
+     1>e:\zhenyi\github\ledpen\ledpen\ogltutorial\sphere.cpp(1): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+         OGLTutorial.cpp
+     1>e:\zhenyi\github\ledpen\ledpen\ogltutorial\ogltutorial.cpp(8): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+         Generating Code...
+     1>Done Building Project "E:\Zhenyi\Github\LEDPen\LEDPen\OGLTutorial\OGLTutorial.vcxproj" (Rebuild target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.76

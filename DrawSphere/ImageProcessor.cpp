@@ -46,7 +46,7 @@ void ImageProcessor::calculatePos()
 		mPos[2] = cv::norm(mCircles[0] - mCircles[1], cv::NORM_L2) / 2 / sqrtf(2);
 	}
 	else {
-		mPos = cv::Vec3f();
+		mPos = cv::Vec3f(-500,0,0);
 	}
 }
 

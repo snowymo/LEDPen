@@ -33,6 +33,9 @@
     <ClCompile Include="ImageProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ZMQPub.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OGLTriangle.h">
@@ -48,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ImageProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZMQPub.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zhelpers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

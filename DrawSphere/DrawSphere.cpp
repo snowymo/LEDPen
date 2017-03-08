@@ -1,22 +1,22 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <GL/glew.h> // include GLEW and new version of GL on Windows
+//#include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <GLFW/glfw3.h> // GLFW helper library
 #include "opencv2/opencv.hpp"
 #include "opencv2/videoio.hpp"
 #include "opencv2/core/matx.hpp"
-#include "OGLTriangle.h"
-#include "OGLSphere.h"
+//#include "OGLTriangle.h"
+//#include "OGLSphere.h"
 #include <iostream>
-#include "OGLSquare.h"
+//#include "OGLSquare.h"
 
 #include "ImageProcessor.h"
-
+#include "ZMQPub.h"
 
 
 int width, height;
-OGLTriangle * pTri = new OGLTriangle;
+//OGLTriangle * pTri = new OGLTriangle;
 //OGLSphere * pSphere = new OGLSphere;
-OGLSquare * pSq = new OGLSquare;
+//OGLSquare * pSq = new OGLSquare;
 float x = 0, y = 0;
 cv::Mat src;
 ImageProcessor *pImgPro = new ImageProcessor;
@@ -64,20 +64,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		pImgPro->p2 -= 3;
 		std::cout << "p2:" << pImgPro->p2 << "\n";
 	}
-	
-	//std::cout << x << "\t" << y << "\n";
-}
-
-void display() {
-	// wipe the drawing surface clear
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glUseProgram(shader_programme);
-	//drawTriangle();
-	//pTri->draw();
-	// drwa sphere
-	//pSphere->draw();
-	//ptrSphere->draw();
-	//pSq->draw(glm::vec3(1,0,0));
 }
 
 
@@ -111,8 +97,8 @@ int main() {
 	glfwSetKeyCallback(window, key_callback);
 
 	// start GLEW extension handler
-	glewExperimental = GL_TRUE;
-	glewInit();
+// 	glewExperimental = GL_TRUE;
+// 	glewInit();
 
 	// get version info
 	const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
@@ -128,18 +114,19 @@ int main() {
 	glfwGetFramebufferSize(window, &width, &height);
 	glViewport(0, 0, width, height);
 
-	pTri->LinkShaders();
+	//pTri->LinkShaders();
 	//pSphere->LinkShaders();
-	pSq->LinkShaders();
+	//pSq->LinkShaders();
 	
 	/* OTHER STUFF GOES HERE NEXT */
 	//pTri->create();
 	//pSphere->create();
-	pSq->create();
+	//pSq->create();
 
 	
 	
 	std::vector<cv::Vec3f> circles;
+	ZMQPub *zp = new ZMQPub;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
@@ -147,44 +134,18 @@ int main() {
 		// update other events like input handling 
 		glfwPollEvents();
 
-		// Clear the color buffer
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		// wipe the drawing surface clear
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		// deal with opencv
 		cap >> src; // get a new frame from camera
-		cv::imshow("src", src);
+		//cv::imshow("src", src);
 		// set src image
 		pImgPro->setSource(src);
 		pImgPro->PreProcess();
 		pImgPro->CheckCircle();
 		
 		circles = pImgPro->getCircles();
-		for (int i = 0; i < circles.size(); i++) {
-			// calculate world position
-			// Rvec-1 * ( (intrisic)-1 * s * [u,v,1] - tvec)
-			//cv::Mat rtvec = pImgPro->getRTVec();// rtvec
-			//cv::Matx31f rvec(rtvec.at<double>(0, 0), rtvec.at<double>(0, 1), rtvec.at<double>(0, 2));
-			//cv::Matx33f rmat;
-			//cv::Rodrigues(rvec, rmat);
-			//cv::Matx31f tvec(rtvec.at<double>(0, 3), rtvec.at<double>(0, 4), rtvec.at<double>(0, 5));
-			//cv::Matx33f intrisic(pImgPro->getIntrisic());
-			//cv::Matx31f screen(circles[i][0]-320,240-circles[i][1],1);
-			//float sc = 0.1;
-			//cv::Matx31f worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
-			//std::cout << "\tworld:" << worldpos << "\n";
-// 			sc = 0.01;
-// 			worldpos = rmat.inv() * (intrisic.inv() * sc * screen - tvec);
-// 			std::cout << "\tworld:" << worldpos << "\n";
-			// Render
-			pSq->add(glm::vec3(circles[i][0] / 640.0f - 0.5, -circles[i][1] / 480.0f + 0.5, 2.0));
-		}
-		//pSq->draw(glm::vec3(1,0,y), 0.5);
-		pSq->draw();
 		std::cout << "pos:" << pImgPro->getPos() << "\n";
-		//display();
+		zp->send(pImgPro->getPos());
+
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);
 	}

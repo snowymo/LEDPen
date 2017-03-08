@@ -1,4 +1,14 @@
-﻿  main.cpp
-d:\zhenyi\projects\ledpen\readvideo\main.cpp(33): warning C4390: ';': empty controlled statement found; is this the intent?
-  ReadVideo.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\ReadVideo.exe
-  ReadVideo.vcxproj -> D:\Zhenyi\Projects\LEDPen\x64\Debug\ReadVideo.pdb (Full PDB)
+﻿Build started 3/7/2017 9:17:58 PM.
+     1>Project "E:\Zhenyi\Github\LEDPen\LEDPen\ReadVideo\ReadVideo.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ID:\Library\opencv\build\x64\vc14\..\..\include /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt main.cpp
+         main.cpp
+     1>e:\zhenyi\github\ledpen\ledpen\readvideo\main.cpp(31): warning C4390: ';': empty controlled statement found; is this the intent?
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\ReadVideo.exe" /INCREMENTAL /NOLOGO /LIBPATH:D:\Library\opencv\build\x64\vc14/lib opencv_world320d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\ReadVideo.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\ReadVideo.lib" /MACHINE:X64 x64\Debug\main.obj
+         ReadVideo.vcxproj -> E:\Zhenyi\Github\LEDPen\LEDPen\x64\Debug\ReadVideo.exe
+     1>Done Building Project "E:\Zhenyi\Github\LEDPen\LEDPen\ReadVideo\ReadVideo.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:02.61
