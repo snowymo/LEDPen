@@ -76,7 +76,7 @@ int main() {
 	success = cap.set(cv::CAP_PROP_FPS, 60);
 	int curexposure = cap.get(CV_CAP_PROP_EXPOSURE);
 	int curAutoExpo = cap.get(CV_CAP_PROP_AUTO_EXPOSURE);
-	success = cap.set(CV_CAP_PROP_EXPOSURE, -7);
+	success = cap.set(CV_CAP_PROP_EXPOSURE, -8);
 	//bool success = cap.set(CV_CAP_PROP_AUTO_EXPOSURE, 2);
 	std::cout << success;
 	// start GL context and O/S window using the GLFW helper library
@@ -134,17 +134,23 @@ int main() {
 		// update other events like input handling 
 		glfwPollEvents();
 
+		std::chrono::milliseconds ms = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+
 		// deal with opencv
 		cap >> src; // get a new frame from camera
 		//cv::imshow("src", src);
 		// set src image
+		
+		//std::chrono::seconds s = std::chrono::duration_cast<std::chrono::seconds>(ms);
 		pImgPro->setSource(src);
 		pImgPro->PreProcess();
 		pImgPro->CheckCircle();
 		
 		circles = pImgPro->getCircles();
 		std::cout << "pos:" << pImgPro->getPos() << "\n";
-		zp->send(pImgPro->getPos());
+		std::chrono::milliseconds ms2 = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+		std::cout << (ms2 - ms).count() << "\n";
+		zp->send(pImgPro->getPos(),ms);
 
 		// put the stuff we've been drawing onto the display
 		glfwSwapBuffers(window);

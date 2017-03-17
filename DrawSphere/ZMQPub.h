@@ -10,7 +10,7 @@ public:
 	ZMQPub();
 	~ZMQPub();
 	void send(std::string st);
-	void send(cv::Vec3f);
+	void send(cv::Vec3f, std::chrono::milliseconds ms2 = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()));
 
 private:
 	zmq::context_t context;
